@@ -2,11 +2,13 @@
 require_once './libs/Router.php';
 require_once './app/Controllers/class-api.controller.php';
 require_once './app/Controllers/subclass-api.controller.php';
+require_once './app/Controllers/specie-api.controller.php';
+require_once './app/Controllers/user-api.controller.php';
 
-// crea el router
 $router = new Router();
 
-// defina la tabla de ruteo
+$router->addRoute('users/token', 'GET', 'UserApiController', 'getToken');
+
 $router->addRoute('classes', 'GET', 'ClassApiController', 'getClasses');
 $router->addRoute('classes/:ID', 'GET', 'ClassApiController', 'getClass');
 $router->addRoute('classes/:ID', 'DELETE', 'ClassApiController', 'deleteClass');
@@ -18,6 +20,12 @@ $router->addRoute('subclasses/:ID', 'GET', 'SubclassApiController', 'getSubclass
 $router->addRoute('subclasses/:ID', 'DELETE', 'SubclassApiController', 'deleteSubclass');
 $router->addRoute('subclasses/:ID', 'PUT', 'SubclassApiController', 'editSubclass'); 
 $router->addRoute('subclasses', 'POST', 'SubclassApiController', 'insertSubclass');
+
+$router->addRoute('species', 'GET', 'SpecieApiController', 'getSpecies');
+$router->addRoute('species/:ID', 'GET', 'SpecieApiController', 'getSpecie');
+$router->addRoute('species/:ID', 'DELETE', 'SpecieApiController', 'deleteSpecie');
+$router->addRoute('species/:ID', 'PUT', 'SpecieApiController', 'editSpecie'); 
+$router->addRoute('species', 'POST', 'SpecieApiController', 'insertSpecie');
 
 
 // ejecuta la ruta (sea cual sea)

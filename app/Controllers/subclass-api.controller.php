@@ -21,8 +21,62 @@ class SubclassApiController {
     }
 
     public function getSubclasses($params = null) {
-        $subclasses = $this->model->getAll();
-        $this->view->response($subclasses);
+        $arrayClass = ["id_subclass", "name", "author", "id_class"];
+        $quant = $this->model->getQuantRegisters();
+
+        if(isset($_GET["filter"])&&!empty($_GET["filter"])&&
+        isset($_GET['value'])){
+            if(in_array($_GET["filter"], $arrayClass)){
+                $column = $_GET['filter'];
+                $value = $_GET['value'];
+            }else{
+                $column= 1;
+                $value = 1;
+            }
+        }else{
+            $column= 1;
+            $value = 1;
+        }
+
+        if(isset($_GET["orderBy"])&&!empty($_GET["orderBy"])){
+            if(in_array($_GET["orderBy"], $arrayClass)){
+                $orderBy = $_GET["orderBy"];
+            }
+        }else{
+            $orderBy=$arrayClass[0];
+        }
+
+        if((isset($_GET['page']))&&(isset($_GET['limit'])&&!empty($_GET['limit']))){
+            $page = $_GET['page'];
+            $limit = $_GET['limit'];
+            $offset = $page*$limit;
+        }else{
+            $offset = 0;
+            $limit = $quant;
+        }
+
+        if(isset($_GET["orderBy"])&&!empty($_GET["orderBy"])){
+            if(in_array($_GET["orderBy"], $arrayClass)){
+                $orderBy = $_GET["orderBy"];
+            }
+        }else{
+            $orderBy=$arrayClass[0];
+        }
+        if(isset($_GET['cond'])&&!empty($_GET['cond'])){
+            if($_GET['cond']==="desc"||$_GET['cond']==="asc"){
+                $cond = $_GET['cond'];
+            }
+        }else{
+            $cond="asc";
+        }
+
+        if($quant<=$offset){
+            $this->view->response("You exceed the limit of items", 400);
+        }else{
+            $subclasses = $this->model->getAll($column, $value, $orderBy, $cond, $limit, $offset);
+            $this->view->response($subclasses);
+        }
+ 
     }
 
     public function getSubclass($params = null) {
