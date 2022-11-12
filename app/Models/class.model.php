@@ -1,12 +1,11 @@
 <?php
 
-class ClassModel {
+require_once './app/Models/generic.model.php';
 
-    private $db;
+class ClassModel extends GenericModel{
 
     public function __construct() {
-        $this->db = new PDO('mysql:host=localhost;'.'dbname=db_molluscs;charset=utf8', 'root', '');
-        $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        parent::__construct();
     }
 
     public function getAll($column, $value, $orderBy, $cond, $limit, $offset) {

@@ -1,50 +1,70 @@
 <?php
-// require_once './app/Models/user.model.php';
+require_once './app/Models/user.model.php';
 require_once './app/Views/api.view.php';
 require_once "./app/Helpers/auth-api.helper.php";
 
-class UserApiController{
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
 
+class AuthApiController {
     private $model;
     private $view;
     private $authHelper;
+    private $data;
 
-    function __construct(){
+    public function __construct() {
         $this->model = new UserModel();
         $this->view = new ApiView();
         $this->authHelper = new AuthApiHelper();
+        // lee el body del request
+        $this->data = file_get_contents("php://input");
     }
 
-    function getToken($params = null) {
-        $userpass = $this->authHelper->getBasic();
-        // Obtengo el usuario de la base de datos
-        // $user = $this->model->getUser($email);
-        $user = array("user"=>$userpass["user"]);
-    
-        // Si el usuario existe y las contraseñas coinciden
-        if (true/*$user && password_verify($password, $user->password)*/) {
-            $token = $this->authHelper->createToken($user);
-            
-            // devolver un token
-            $this->view->response(["token"=>$token], 200);
+    private function getData() {
+        return json_decode($this->data);
+    }
+
+    public function getToken($params = null) {
+        // Obtener "Basic base64(user:pass)
+        $basic = $this->authHelper->getAuthHeader();
         
-        }else{
-            $this->view->response("Usuario y contraseña incorrectos", 401);
+        if(empty($basic)){
+            $this->view->response('No autorizado', 401);
+            return;
         }
-    }
+        $basic = explode(" ",$basic); // ["Basic" "base64(user:pass)"]
+        if($basic[0]!="Basic"){
+            $this->view->response('La autenticación debe ser Basic', 401);
+            return;
+        }
 
-    function obtenerUsuario($params = null){
-        // users/:ID
-        $id = $params[":ID"];
-        $user = $this->authHelper->getUser();
-        if($user)
-            if($id == $user->sub){
-                $this->view->response($user, 200);
-            }else{
-                $this->view->response("Forbidden", 403);
-            }
-        else{
-            $this->view->response("Unauthorized", 401);
+        //validar usuario:contraseña
+        $userpass = base64_decode($basic[1]); // user:pass
+        $userpass = explode(":", $userpass);
+        $username = $userpass[0];
+        $pass = $userpass[1];
+        $user = $this->model->getUser($username);
+        //verifico si existe
+        if($user && password_verify($pass, $user->password)){
+            //  crear un token
+            $header = array(
+                'alg' => 'HS256',
+                'typ' => 'JWT'
+            );
+            $payload = array(
+                'id' => 1,
+                'name' => $user,
+                'exp' => time()+3600
+            );
+            $header = base64url_encode(json_encode($header));
+            $payload = base64url_encode(json_encode($payload));
+            $signature = hash_hmac('SHA256', "$header.$payload", $authHelper->key, true);
+            $signature = base64url_encode($signature);
+            $token = "$header.$payload.$signature";
+             $this->view->response($token);
+        }else{
+            $this->view->response('Incorrect user and password', 401);
         }
     }
 }

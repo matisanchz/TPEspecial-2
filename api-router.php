@@ -7,7 +7,7 @@ require_once './app/Controllers/user-api.controller.php';
 
 $router = new Router();
 
-$router->addRoute('users/token', 'GET', 'UserApiController', 'getToken');
+$router->addRoute('auth/token', 'GET', 'AuthApiController', 'getToken');
 
 $router->addRoute('classes', 'GET', 'ClassApiController', 'getClasses');
 $router->addRoute('classes/:ID', 'GET', 'ClassApiController', 'getClass');
