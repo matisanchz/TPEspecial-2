@@ -22,6 +22,7 @@ class ClassApiController {
 
     public function getClasses($params = null) {
         $arrayClass = ["id_class", "name", "author", "features"];
+        $arrayCondition = ["asc", "desc"];
         $quant = $this->model->getQuantRegisters();
 
         if(isset($_GET['filter'])&&!empty($_GET['filter'])&&
@@ -66,7 +67,7 @@ class ClassApiController {
 
         if(isset($_GET['cond'])&&!empty($_GET['cond'])){
             if($_GET['cond']==="desc"||$_GET['cond']==="asc"){
-                $cond = $arrayClass[array_search($_GET['cond'], $arrayClass)];
+                $cond = $arrayCondition[array_search($_GET['cond'], $arrayCondition)];
             }else{
                 $this->view->response("Resource not found", 404);
                 die();

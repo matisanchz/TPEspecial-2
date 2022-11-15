@@ -21,13 +21,14 @@ class SpecieApiController {
     }
 
     public function getSpecies($params = null) {
-        $arrayClass = ["id_specie", "scientific_name", "author", "location", "id_subclass"];
+        $arraySpecie = ["id_specie", "scientific_name", "author", "location", "id_subclass"];
+        $arrayCondition = ["asc", "desc"];
         $quant = $this->model->getQuantRegisters();
 
         if(isset($_GET['filter'])&&!empty($_GET['filter'])&&
         isset($_GET['value'])){
-            if(in_array($_GET['filter'], $arrayClass)){
-                $column = $arrayClass[array_search($_GET['filter'], $arrayClass)];
+            if(in_array($_GET['filter'], $arraySpecie)){
+                $column = $arraySpecie[array_search($_GET['filter'], $arraySpecie)];
                 $value = $_GET['value'];
             }else{
                 $this->view->response("Resource not found", 404);
@@ -39,15 +40,15 @@ class SpecieApiController {
         }
 
         if(isset($_GET['orderBy'])&&!empty($_GET['orderBy'])){
-            if(in_array($_GET['orderBy'], $arrayClass)){
-                $orderBy = $arrayClass[array_search($_GET['orderBy'], $arrayClass)];
+            if(in_array($_GET['orderBy'], $arraySpecie)){
+                $orderBy = $arraySpecie[array_search($_GET['orderBy'], $arraySpecie)];
             }
             else{
                 $this->view->response("Resource not found", 404);
                 die();
             }
         }else{
-            $orderBy=$arrayClass[0];
+            $orderBy=$arraySpecie[0];
         }
 
         if((isset($_GET['page']))&&(isset($_GET['limit'])&&!empty($_GET['limit']))){
@@ -66,7 +67,7 @@ class SpecieApiController {
 
         if(isset($_GET['cond'])&&!empty($_GET['cond'])){
             if($_GET['cond']==="desc"||$_GET['cond']==="asc"){
-                $cond = $arrayClass[array_search($_GET['cond'], $arrayClass)];
+                $cond = $arrayCondition[array_search($_GET['cond'], $arrayCondition)];
             }else{
                 $this->view->response("Resource not found", 404);
                 die();

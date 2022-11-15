@@ -21,13 +21,14 @@ class SubclassApiController {
     }
 
     public function getSubclasses($params = null) {
-        $arrayClass = ["id_subclass", "name", "author", "id_class"];
+        $arraySubclass = ["id_subclass", "name", "author", "id_class"];
+        $arrayCondition = ["asc", "desc"];
         $quant = $this->model->getQuantRegisters();
 
         if(isset($_GET['filter'])&&!empty($_GET['filter'])&&
         isset($_GET['value'])){
-            if(in_array($_GET['filter'], $arrayClass)){
-                $column = $arrayClass[array_search($_GET['filter'], $arrayClass)];
+            if(in_array($_GET['filter'], $arraySubclass)){
+                $column = $arraySubclass[array_search($_GET['filter'], $arraySubclass)];
                 $value = $_GET['value'];
             }else{
                 $this->view->response("Resource not found", 404);
@@ -39,15 +40,15 @@ class SubclassApiController {
         }
 
         if(isset($_GET['orderBy'])&&!empty($_GET['orderBy'])){
-            if(in_array($_GET['orderBy'], $arrayClass)){
-                $orderBy = $arrayClass[array_search($_GET['orderBy'], $arrayClass)];
+            if(in_array($_GET['orderBy'], $arraySubclass)){
+                $orderBy = $arraySubclass[array_search($_GET['orderBy'], $arraySubclass)];
             }
             else{
                 $this->view->response("Resource not found", 404);
                 die();
             }
         }else{
-            $orderBy=$arrayClass[0];
+            $orderBy=$arraySubclass[0];
         }
 
         if((isset($_GET['page']))&&(isset($_GET['limit'])&&!empty($_GET['limit']))){
@@ -66,7 +67,7 @@ class SubclassApiController {
 
         if(isset($_GET['cond'])&&!empty($_GET['cond'])){
             if($_GET['cond']==="desc"||$_GET['cond']==="asc"){
-                $cond = $arrayClass[array_search($_GET['cond'], $arrayClass)];
+                $cond = $arrayCondition[array_search($_GET['cond'], $arrayCondition)];
             }else{
                 $this->view->response("Resource not found", 404);
                 die();
