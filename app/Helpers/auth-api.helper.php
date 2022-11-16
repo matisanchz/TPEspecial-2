@@ -7,6 +7,10 @@ class AuthApiHelper{
         $this->key = "web2-tp2";
     }
 
+    function getKey(){
+        return $this->key;
+    }
+
     function getToken(){
         $auth = $this->getAuthHeader(); // Bearer header.payload.signature
         $auth = explode(" ", $auth);

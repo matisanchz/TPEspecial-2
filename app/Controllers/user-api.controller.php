@@ -12,12 +12,13 @@ class AuthApiController {
     private $view;
     private $authHelper;
     private $data;
+    private $key;
 
     public function __construct() {
         $this->model = new UserModel();
         $this->view = new ApiView();
         $this->authHelper = new AuthApiHelper();
-        // lee el body del request
+        $this->key = "web2-tp2";
         $this->data = file_get_contents("php://input");
     }
 
@@ -59,7 +60,7 @@ class AuthApiController {
             );
             $header = base64url_encode(json_encode($header));
             $payload = base64url_encode(json_encode($payload));
-            $signature = hash_hmac('SHA256', "$header.$payload", $authHelper->key, true);
+            $signature = hash_hmac('SHA256', "$header.$payload", $this->key, true);
             $signature = base64url_encode($signature);
             $token = "$header.$payload.$signature";
              $this->view->response($token);
