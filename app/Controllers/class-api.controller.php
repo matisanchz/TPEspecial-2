@@ -98,7 +98,7 @@ class ClassApiController {
         $id = $params[':ID'];
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
@@ -114,7 +114,7 @@ class ClassApiController {
         $class = $this->getData();
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
@@ -131,7 +131,7 @@ class ClassApiController {
         $id = $params[':ID'];
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
@@ -141,7 +141,6 @@ class ClassApiController {
             if (empty($class->name) || empty($class->author) || empty($class->features)) {
                 $this->view->response("Complete the fields and try again", 400);
             } else {
-                //ver si existe forma de devolver el id de un update, sin tener q volver a llamar denuevo a get(id)
                 $this->model->edit($newclass->name, $newclass->author, $newclass->features, $id);
                 $class = $this->model->get($id);
                 $this->view->response($class, 201);

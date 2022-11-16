@@ -30,12 +30,12 @@ class AuthApiController {
         $basic = $this->authHelper->getAuthHeader();
         
         if(empty($basic)){
-            $this->view->response('No autorizado', 401);
+            $this->view->response('Not authorized', 401);
             return;
         }
         $basic = explode(" ",$basic); // ["Basic" "base64(user:pass)"]
         if($basic[0]!="Basic"){
-            $this->view->response('La autenticación debe ser Basic', 401);
+            $this->view->response('The authentication must be Basic', 401);
             return;
         }
 

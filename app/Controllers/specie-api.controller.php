@@ -91,14 +91,14 @@ class SpecieApiController {
         if ($specie)
             $this->view->response($specie);
         else 
-            $this->view->response("La subclase con el id=$id no existe", 404);
+            $this->view->response("The specie with id=$id doesn´t exist", 404);
     }
 
     public function deleteSpecie($params = null) {
         $id = $params[':ID'];
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
@@ -107,19 +107,19 @@ class SpecieApiController {
             $this->model->delete($id);
             $this->view->response($specie);
         } else 
-            $this->view->response("La subclase con el id=$id no existe", 404);
+            $this->view->response("The specie with id=$id doesn´t exist", 404);
     }
 
     public function insertSpecie($params = null) {
         $specie = $this->getData();
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
         if (empty($specie->scientific_name) || empty($specie->author) || empty($specie->location)|| empty($specie->id_subclass)) {
-            $this->view->response("Complete los datos", 400);
+            $this->view->response("Complete the fields and try again", 400);
         } else {
             $id = $this->model->insert($specie->scientific_name, $specie->author, $specie->location, $specie->id_subclass);
             $specie = $this->model->get($id);
@@ -131,7 +131,7 @@ class SpecieApiController {
         $id = $params[':ID'];
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
@@ -139,9 +139,8 @@ class SpecieApiController {
         if ($specie) {
             $newspecie = $this->getData();
             if (empty($specie->scientific_name) || empty($specie->author) || empty($specie->location)|| empty($specie->id_subclass)) {
-                $this->view->response("Complete los datos", 400);
+                $this->view->response("Complete the fields and try again", 400);
             } else {
-                //ver si existe forma de devolver el id de un update, sin tener q volver a llamar denuevo a get(id)
                 $this->model->edit($newspecie->scientific_name, $newspecie->author, $newspecie->location, $newspecie->id_subclass, $id);
                 $specie = $this->model->get($id);
                 $this->view->response($specie, 201);

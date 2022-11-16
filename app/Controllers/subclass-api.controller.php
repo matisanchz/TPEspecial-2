@@ -86,22 +86,20 @@ class SubclassApiController {
     }
 
     public function getSubclass($params = null) {
-        // obtengo el id del arreglo de params
         $id = $params[':ID'];
         $subclass = $this->model->get($id);
 
-        // si no existe devuelvo 404
         if ($subclass)
             $this->view->response($subclass);
         else 
-            $this->view->response("La subclase con el id=$id no existe", 404);
+            $this->view->response("The subclass with id=$id doesn´t exist", 404);
     }
 
     public function deleteSubclass($params = null) {
         $id = $params[':ID'];
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
@@ -110,19 +108,19 @@ class SubclassApiController {
             $this->model->delete($id);
             $this->view->response($subclass);
         } else 
-            $this->view->response("La subclase con el id=$id no existe", 404);
+            $this->view->response("The subclass with id=$id doesn´t exist", 404);
     }
 
     public function insertSubclass($params = null) {
         $subclass = $this->getData();
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
         if (empty($subclass->name) || empty($subclass->author) || empty($subclass->id_class)) {
-            $this->view->response("Complete los datos", 400);
+            $this->view->response("Complete the fields and try again", 400);
         } else {
             $id = $this->model->insert($subclass->name, $subclass->author, $subclass->id_class);
             $subclass = $this->model->get($id);
@@ -134,7 +132,7 @@ class SubclassApiController {
         $id = $params[':ID'];
 
         if(!$this->authHelper->isLoggedIn()){
-            $this->view->response("No estas logeado", 401);
+            $this->view->response("You are not logged", 401);
             return;
         }
 
@@ -142,9 +140,8 @@ class SubclassApiController {
         if ($subclass) {
             $newsubclass = $this->getData();
             if (empty($subclass->name) || empty($subclass->author) || empty($subclass->id_class)) {
-                $this->view->response("Complete los datos", 400);
+                $this->view->response("Complete the fields and try again", 400);
             } else {
-                //ver si existe forma de devolver el id de un update, sin tener q volver a llamar denuevo a get(id)
                 $this->model->edit($newsubclass->name, $newsubclass->author, $newsubclass->id_class, $id);
                 $subclass = $this->model->get($id);
                 $this->view->response($subclass, 201);
