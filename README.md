@@ -1,5 +1,9 @@
 # TPEspecial-2
 
+This is a simple tool that lets you easily a CRUD to the Mollusca catalog, using RESTful interface.
+
+## Resource name maps to the endpoint url:
+
 ## Auth Token:
 
 GET - With an specific useremail and password, you will reach a token that allows to CREATE, MODIFY and DELETE items from different entities:
