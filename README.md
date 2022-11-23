@@ -74,6 +74,12 @@ In the GET endpoint, add this query params:
 
 The default will be id column
 
+## Condition
+In the GET endpoint, add two query params:
+    ?cond=desc or asc
+
+The default will be asc
+
 ## Pagination
 In the GET endpoint, add two query params:
     ?page=name of the page
