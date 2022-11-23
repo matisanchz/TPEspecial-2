@@ -60,3 +60,21 @@ PUT - You can modify a register from the Entity "Species" with an specific id; t
 
 DELETE - You can delete a register from the Entity "Species" with an specific id; token is required:
     http://localhost/Web2/TPE/TPEspecial-2/api/species/:id
+
+## Filtering
+In the GET endpoint, add two query params:
+    ?filter="name of column"
+    ?value="value to filter"
+
+The default will be 1 and 1
+
+## Sorting
+In the GET endpoint, add this query params:
+    ?orderBy="name of column"
+
+The default will be id column
+
+## Pagination
+In the GET endpoint, add two query params:
+    ?page=name of the page
+    ?limit=quantity of items
